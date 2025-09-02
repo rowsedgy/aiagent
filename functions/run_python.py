@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 def run_python_file(working_directory, file_path, args=[]):
     file_abs_path = os.path.join(os.path.abspath(working_directory), file_path)
@@ -27,4 +28,23 @@ def run_python_file(working_directory, file_path, args=[]):
         return f'{output}. Process exited with code {completed_process.returncode}'
     else:
         return output
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Execute the specified file with the supplied arguments if any, contstrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The python file that will be executed using the arguments if any. No arguments if none passed. The files path will be constructed using the working directory",
+            ),
+            "args": types.Schema(
+                type = types.Type.STRING,
+                description="List of arguments passed to the python file. Use none if empty."
+            )
+        },
+    ),
+)
+
         
